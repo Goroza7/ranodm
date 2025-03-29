@@ -2,11 +2,10 @@
 import random
 import os
 import sys
+from guessing_game import main
 
 # Add the repository root directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from guessing_game import main
-
 
 def test_guessing_game(monkeypatch, capsys):
     # Force the random number to always be 42.
