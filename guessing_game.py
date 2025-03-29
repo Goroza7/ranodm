@@ -1,6 +1,7 @@
 # guessing_game.py
 import random
 
+
 def main():
     number = random.randint(1, 100)
     guesses = 0
@@ -18,6 +19,7 @@ def main():
         else:
             print(f"Congratulations! You guessed it in {guesses} tries!")
             break
+
 
 if __name__ == "__main__":
     main()
