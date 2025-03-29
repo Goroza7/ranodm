@@ -2,13 +2,16 @@
 import random
 from guessing_game import main
 
+
 def test_guessing_game(monkeypatch, capsys):
     # Force the random number to always be 42.
-    monkeypatch.setattr(random, 'randint', lambda a, b: 42)
+    monkeypatch.setattr(random, 'randint', lambda a,
+                         b: 42)
 
     # Simulate two user inputs: first guess '50' (too high) then '42' (correct).
     inputs = iter(["50", "42"])
-    monkeypatch.setattr("builtins.input", lambda prompt="": next(inputs))
+    monkeypatch.setattr("builtins.input",
+                         lambda prompt="": next(inputs))
 
     # Run the game.
     main()
