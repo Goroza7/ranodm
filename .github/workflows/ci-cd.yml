@@ -1,7 +1,5 @@
 name: CI/CD Pipeline
 
-# Triggers for CI: push and pull requests to main.
-# Triggers for CD: when a release is published.
 on:
   push:
     branches: [main]
@@ -11,10 +9,10 @@ on:
     types: [published]
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -22,25 +20,25 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Install dependencies for linting
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Linting
+        run: |
           pip install flake8
+          flake8 .
 
-      - name: Lint Code
-        run: flake8 .
-
-      - name: Check Python Syntax
-        # Replace 'your_script.py' with the actual filename
-        run: python -m py_compile your_script.py
+      - name: Run Tests
+        run: pytest
 
   cd:
-    # CD job runs only on release events
     if: github.event_name == 'release'
-    needs: ci
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -48,13 +46,11 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Package the project
-        # Here, we assume you have a packaging step.
-        # For a simple script, you might just zip the file.
+      - name: Package Artifact
         run: |
-          mkdir artifact
-          cp your_script.py artifact/
-          cd artifact && zip ../artifact.zip your_script.py
+          mkdir output
+          cp guessing_game.py output/
+          cd output && zip ../artifact.zip guessing_game.py
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
