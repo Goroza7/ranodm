@@ -1,8 +1,11 @@
-import setup_path 
+import sys
+import os
 from guessing_game import main
 import random
 
 def test_guessing_game(monkeypatch, capsys):
+    sys.path.insert(0, 
+                os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
     # Force the random number to always be 42.
     monkeypatch.setattr(random,
                         'randint', lambda a, b: 42)
